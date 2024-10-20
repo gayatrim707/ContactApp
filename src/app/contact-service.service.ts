@@ -25,10 +25,10 @@ export class ContactServiceService {
     // });
     return  this.http.post(this.apiUrl, contact)
   }
-  deleteContact(Id:number){
+  deleteContact(Id:number): Observable<any>{
     return this.http.delete(this.apiUrl+"/"+Id);
   }
-  UpdateContact(Id:number,contact: Contact): Observable<Contact> {
+  UpdateContact(Id:number,contact: Contact): Observable<any> {
     return this.http.put<Contact>(this.apiUrl+"/"+Id, contact, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });

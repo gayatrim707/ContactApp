@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { Contact, ContactServiceService } from '../contact-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { MatDialog } from '@angular/material/dialog';
+import { SuccessMessageComponent } from '../success-message/success-message.component';
 @Component({
   selector: 'app-create-contact',
   templateUrl: './createcontact.component.html',
@@ -11,7 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class CreateContactComponent implements OnInit, OnChanges{
   myForm !: FormGroup;
   @Input() contactId!: number;
-  constructor(private activatedRoute: ActivatedRoute,private contactService: ContactServiceService, private router: Router,private fb: FormBuilder) {
+  constructor(private activatedRoute: ActivatedRoute,private contactService: ContactServiceService, 
+    private router: Router,private fb: FormBuilder,private dialog: MatDialog) {
   }
   contacts: Contact = { id: 0, FirstName: '', Email: '', LastName: '' };
   contactDetail:any;
@@ -40,11 +42,18 @@ export class CreateContactComponent implements OnInit, OnChanges{
   updateContact(){
     if (this.myForm.valid) {
       this.contacts=this.myForm.value;
-        this.contactService.UpdateContact(this.contactId,this.contacts).subscribe((res)=>{
-          this.myForm.reset();
-          this.contactId=0;
-          window.location.reload();
-       }) 
+        this.contactService.UpdateContact(this.contactId,this.contacts).subscribe({
+          next: (res) => {
+            console.log(res);
+            this.openSuccessDialog(res.message);
+            this.myForm.reset();
+            this.contactId=0;
+           // window.location.reload();
+          },
+          error: (err) => {
+            console.error('Error creating Contact:', err);
+          },
+        });
       }
       else {
         console.log('Form is invalid');
@@ -56,10 +65,11 @@ export class CreateContactComponent implements OnInit, OnChanges{
       this.contacts=this.myForm.value;
       this.contactService.createContact(this.contacts).subscribe({
       next: (res) => {
-        console.log('Contact created successfully:', res);
+        console.log(res);
+        this.openSuccessDialog(res.message);
         this.myForm.reset();
         this.contactId=0;
-        window.location.reload();
+       // window.location.reload();
       },
       error: (err) => {
         console.error('Error creating Contact:', err);
@@ -72,5 +82,10 @@ export class CreateContactComponent implements OnInit, OnChanges{
   }
   resetForm(): void {
     this.myForm.reset();
+  }
+  openSuccessDialog(message: string) {
+    this.dialog.open(SuccessMessageComponent, {
+      data: { message }
+    });
   }
 }

@@ -9,12 +9,17 @@ import { ContactServiceService } from './contact-service.service';
 import { CreateContactComponent } from './createcontact/createcontact.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { SuccessMessageComponent } from './success-message/success-message.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button'; // Import button module
+import { MatInputModule } from '@angular/material/input';   // If using inputs
 @NgModule({
   declarations: [
     AppComponent,
     ContactComponent,
-    CreateContactComponent
+    CreateContactComponent,
+    SuccessMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -22,11 +27,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
   ],
   providers: [
     provideClientHydration(),
-    ContactServiceService
+    ContactServiceService,
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

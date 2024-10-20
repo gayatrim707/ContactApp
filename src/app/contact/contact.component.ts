@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact, ContactServiceService } from '../contact-service.service';
 import { Router } from '@angular/router';
+import { SuccessMessageComponent } from '../success-message/success-message.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contact',
@@ -15,7 +17,7 @@ export class ContactComponent {
   };
   contactslist: any =[];
   
-  constructor(private contactService: ContactServiceService, private router: Router) {}
+  constructor(private contactService: ContactServiceService, private router: Router,private dialog: MatDialog) {}
   ngOnInit() {   
     this.getAllContact()
   }
@@ -34,12 +36,19 @@ export class ContactComponent {
     this.contactService.deleteContact(id)
     .subscribe({
       next: (res) => {
-        console.log('Contact deleted successfully:', res);
-        this.getAllContact();
+        console.log(res.message);
+        this.openSuccessDialog(res.message);
+        this.selectedItemId=0;
+        this.getAllContact()
       },
       error: (err) => {
         console.error('Error deleting Contact:', err);
       },
+    });
+  }
+  openSuccessDialog(message: string) {
+    this.dialog.open(SuccessMessageComponent, {
+      data: { message }
     });
   }
 }
