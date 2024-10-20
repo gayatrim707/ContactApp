@@ -14,7 +14,7 @@ export class ContactComponent {
     Email: ''
   };
   contactslist: any =[];
-
+  
   constructor(private contactService: ContactServiceService, private router: Router) {}
   ngOnInit() {   
     this.getAllContact()
@@ -23,8 +23,6 @@ export class ContactComponent {
   selectedItemId: number = 0;
    goToCreate(id: number) {
     this.selectedItemId=id;
-    //this.itemSelected.emit(id);
-    //this.router.navigate(['/contact']);
   }
   getAllContact(){
     this.contactService.getContacts().subscribe((data: any) => {

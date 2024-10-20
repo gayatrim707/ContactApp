@@ -12,12 +12,9 @@ export class CreateContactComponent implements OnInit, OnChanges{
   myForm !: FormGroup;
   @Input() contactId!: number;
   constructor(private activatedRoute: ActivatedRoute,private contactService: ContactServiceService, private router: Router,private fb: FormBuilder) {
-   
-    
   }
   contacts: Contact = { id: 0, FirstName: '', Email: '', LastName: '' };
   contactDetail:any;
- 
   ngOnInit(){
     this.myForm = this.fb.group({
       Id:0,
@@ -27,8 +24,8 @@ export class CreateContactComponent implements OnInit, OnChanges{
     });
   }
   ngOnChanges(changes: SimpleChanges) {
-    this.contacts.id= this.contactId;
-      if(this.contactId != 0)
+      this.contacts.id= this.contactId;
+      if(this.contactId > 0)
       {
           this.getContactById();
       }
@@ -43,10 +40,10 @@ export class CreateContactComponent implements OnInit, OnChanges{
   updateContact(){
     if (this.myForm.valid) {
       this.contacts=this.myForm.value;
-      console.log(this.contacts);
-      console.log(this.contactId);
         this.contactService.UpdateContact(this.contactId,this.contacts).subscribe((res)=>{
-         console.log(res);
+          this.myForm.reset();
+          this.contactId=0;
+          window.location.reload();
        }) 
       }
       else {
@@ -56,14 +53,13 @@ export class CreateContactComponent implements OnInit, OnChanges{
 
   createContact() {
     if (this.myForm.valid) {
-      console.log(this.myForm.value);
       this.contacts=this.myForm.value;
-      console.log(this.contacts);
       this.contactService.createContact(this.contacts).subscribe({
       next: (res) => {
         console.log('Contact created successfully:', res);
         this.myForm.reset();
-        this.router.navigate(['']);
+        this.contactId=0;
+        window.location.reload();
       },
       error: (err) => {
         console.error('Error creating Contact:', err);
@@ -75,6 +71,6 @@ export class CreateContactComponent implements OnInit, OnChanges{
   }
   }
   resetForm(): void {
-    this.contacts = { id: 0, FirstName: '', Email: '', LastName: '' };
+    this.myForm.reset();
   }
 }

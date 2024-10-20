@@ -1,11 +1,9 @@
-
-
-<div class="container mt-5">
-
+<div class="container">
     <!-- Add New Contact Button -->
-    <button class="btn btn-success mb-3" routerLink = "/contact">New</button>
-    <app-create-contact [contactId]="selectedItemId"></app-create-contact>
+    <button class="btn btn-success mb-3" (click) = "goToCreate(-1)">New</button>
+    <app-create-contact  [contactId]="selectedItemId"></app-create-contact>
     <!-- Contacts Table -->
+     <br>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
