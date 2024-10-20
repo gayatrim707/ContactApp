@@ -27,6 +27,7 @@ Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (version 12 or higher)
 - [Angular CLI](https://angular.io/cli) (install it globally with `npm install -g @angular/cli`)
+- - A code editor (like [Visual Studio](https://visualstudio.microsoft.com/) or [Visual Studio Code](https://code.visualstudio.com/))
 
 ### Installation
 
