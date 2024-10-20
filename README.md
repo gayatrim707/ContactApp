@@ -1,7 +1,6 @@
 # Contact App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
-A simple Angular application for managing contacts. This app allows users to add, edit, delete, and view their contacts easily.
+A simple Angular application for managing contacts. This app allows users to add, edit, delete, and view their contacts easily.This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
 
 ## Features
 
