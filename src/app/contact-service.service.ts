@@ -14,7 +14,10 @@ export class ContactServiceService {
     return  this.http.get(this.apiUrl);
    }
    getContactsById(contact: Contact){
-    return this.http.get(this.apiUrl+"/"+contact.id);
+    return this.http.get<Contact>(this.apiUrl+"/"+contact.id, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    });
+    //return this.http.get(this.apiUrl+"/"+contact.id);
   }
   createContact(contact: any): Observable<any> {
     // return this.http.post<Contact>(this.apiUrl, contact, {
@@ -25,8 +28,8 @@ export class ContactServiceService {
   deleteContact(Id:number){
     return this.http.delete(this.apiUrl+"/"+Id);
   }
-  UpdateContact(contact: Contact): Observable<Contact> {
-    return this.http.put<Contact>(this.apiUrl+"/"+contact.id, contact, {
+  UpdateContact(Id:number,contact: Contact): Observable<Contact> {
+    return this.http.put<Contact>(this.apiUrl+"/"+Id, contact, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }

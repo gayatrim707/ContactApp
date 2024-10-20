@@ -4,7 +4,7 @@
 
     <!-- Add New Contact Button -->
     <button class="btn btn-success mb-3" routerLink = "/contact">New</button>
-   
+    <app-create-contact [contactId]="selectedItemId"></app-create-contact>
     <!-- Contacts Table -->
     <table class="table table-bordered table-striped">
       <thead>
@@ -33,5 +33,5 @@
       </tbody>
     </table>
   </div>
-  <app-create-contact [contactId]="selectedItemId"></app-create-contact>
+ 
   

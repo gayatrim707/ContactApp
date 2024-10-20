@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Contact, ContactServiceService } from '../contact-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,44 +8,50 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './createcontact.component.html',
   styleUrl: './createcontact.component.css',
 })
-export class CreateContactComponent {
-  myForm: FormGroup;
+export class CreateContactComponent implements OnInit, OnChanges{
+  myForm !: FormGroup;
+  @Input() contactId!: number;
   constructor(private activatedRoute: ActivatedRoute,private contactService: ContactServiceService, private router: Router,private fb: FormBuilder) {
-    this.myForm = this.fb.group({
-      Id:0,
-      FirstName: ['', Validators.required],
-      LastName: ['', Validators.required],
-      Email: ['', [Validators.required, Validators.email]]
-    });
+   
+    
   }
-  //contactId=localStorage.getItem('contactId'); 
   contacts: Contact = { id: 0, FirstName: '', Email: '', LastName: '' };
   contactDetail:any;
-  @Input() contactId: number =0;
-  //@Input() itemId!: number;
+ 
   ngOnInit(){
-   
-      // Example logic for fetching the item based on ID
-      console.log(`Item ${this.contactId}`); // Simulate fetching item name
-    
-      this.contacts.id= this.contactId;
-      console.log(this.contactId)
+    this.myForm = this.fb.group({
+      Id:0,
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    this.contacts.id= this.contactId;
       if(this.contactId != 0)
       {
-          //  this.getContactById();
+          this.getContactById();
       }
   }
   getContactById(){
-    this.contactService.getContactsById(this.contacts).subscribe((res) => {
-      console.log(res);
-      this.contactDetail=res;
-    });
-   
+    this.contactService.getContactsById(this.contacts).subscribe((data: any) => {
+      console.log(data)  
+      this.contactDetail = data;
+      this.myForm.patchValue(data);
+      });
   }
   updateContact(){
-        this.contactService.UpdateContact(this.contacts).subscribe((res)=>{
+    if (this.myForm.valid) {
+      this.contacts=this.myForm.value;
+      console.log(this.contacts);
+      console.log(this.contactId);
+        this.contactService.UpdateContact(this.contactId,this.contacts).subscribe((res)=>{
          console.log(res);
        }) 
+      }
+      else {
+        console.log('Form is invalid');
+      }
      } 
 
   createContact() {
@@ -57,6 +63,7 @@ export class CreateContactComponent {
       next: (res) => {
         console.log('Contact created successfully:', res);
         this.myForm.reset();
+        this.router.navigate(['']);
       },
       error: (err) => {
         console.error('Error creating Contact:', err);
